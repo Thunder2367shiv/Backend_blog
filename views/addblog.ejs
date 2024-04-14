@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head') %>
+    <title>Add New Blog</title>
+    <style>
+        body {
+            background-color: #1f2933; /* Dark blue-gray background */
+            color: #fff; /* White text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font family */
+            overflow: hidden; /* Prevent horizontal scrollbar due to animation */
+        }
+
+        /* Animation for the background */
+        @keyframes animatedBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Custom CSS for form */
+        .container {
+            margin-top: 2rem;
+        }
+
+        label {
+            font-weight: bold;
+            color: #f7f7f7; /* Light blue label text */
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            background-color: #ffffff; /* Dark slate gray input background */
+            color: #050505; /* White text */
+            border-color: #000000; /* Gray border color */
+            border-width: 0.2rem;
+            border-radius: 0.8rem; /* Rounded corners */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        textarea {
+            height: 250px;
+            background-color: #ffffff; /* Dark slate gray input background */
+            color: #050505; /* White text */
+            border-color: #000000; /* Gray border color */
+            border-width: 0.2rem;
+            border-radius: 0.8rem; /* Rounded corners */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        input[type="file"]:focus {
+            background-color: #b9bbbe; /* Darker slate gray input background on focus */
+            border-color: #0f0f0f; /* Light blue border color on focus */
+        }
+
+        .btn-primary {
+            background-color: #4a90e2; /* Vivid cerulean button color */
+            border-color: #4a90e2; /* Vivid cerulean button border color */
+            border-radius: 0.3rem; /* Rounded corners */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            display: block; /* Display as block element */
+            margin: 0 auto; /* Center horizontally */
+            width: fit-content; /* Set width to fit content */
+        }
+
+        .btn-primary:hover {
+            background-color: #357bd8; /* Darker vivid cerulean hover color for primary button */
+            border-color: #357bd8; /* Darker vivid cerulean hover border color for primary button */
+        }
+
+        /* Apply animation to the background */
+        body:before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #414147, #142930, #0c1f28); /* Dark gradient */
+            background-size: 400% 400%;
+            animation: animatedBackground 15s ease infinite; /* Animation */
+        }
+
+        /* Style for image preview */
+        .image-preview {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .image-preview img {
+            max-width: 50%;
+            max-height: 200px;
+            margin-top: 1rem;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .labelme {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+    <form action="/blog" method="POST" enctype="multipart/form-data">
+        <div class="container">
+            <label for="title" class="labelme">Title: </label>
+            <input type="text" class="form-control" id="title" name="title">
+        </div>
+        <div class="container">
+            <label for="body" class="labelme">Body:</label>
+            <textarea class="form-control" id="body" name="body" rows="6"></textarea>
+        </div>
+        <div class="container">
+            <label for="coverImage" class="labelme">Cover Image:</label>
+            <input type="file" class="form-control" id="coverImage" name="coverImage" onchange="previewImage(event) ">
+        </div>
+        <div class="image-preview" id="imagePreview"></div> <!-- Image preview container -->
+        <div class="container mt-3">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+
+    <%- include('./partials/script') %>
+
+    <script>
+        // Function to display uploaded image preview
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var imagePreview = document.getElementById('imagePreview');
+                imagePreview.innerHTML = ''; // Clear previous preview
+                var img = document.createElement('img');
+                img.src = reader.result;
+                img.className = 'preview-img';
+                imagePreview.appendChild(img);
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+
+</html>

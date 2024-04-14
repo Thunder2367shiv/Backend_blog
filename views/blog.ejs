@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head') %>
+    <title>Blog page</title>
+    <style>
+        /* Add your CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .blog-title {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .blog-box {
+            background-color: #060728;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .blogimage {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .blogimage img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .user-info {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .user-image {
+            width: 5%;
+            height: auto;
+            border-radius: 50%;
+            margin-right: 1em;
+        }
+
+        .blog-content {
+            text-align: justify;
+            font-size: 1.2em;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+        }
+
+        .comment-box {
+            background-color: #333333;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .comment-box img {
+            width: 2em;
+            height: auto;
+            border-radius: 50%;
+            margin-right: 0.5em;
+        }
+
+        .comment-content {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        /* Add animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animated {
+            animation: fadeIn 1s ease;
+        }
+
+        /* Responsive layout */
+        @media (max-width: 768px) {
+            .blog-title {
+                font-size: 1.5em;
+            }
+
+            .user-info {
+                text-align: center;
+            }
+
+            .user-image {
+                width: 15%;
+            }
+
+            .comment-box img {
+                width: 3em;
+            }
+
+            .comment-content {
+                font-size: 0.9em;
+            }
+
+            .blog-content {
+                font-size: 0.9em;
+            }
+        }
+        body:before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #414147, #142930, #0c1f28); /* Dark gradient */
+            background-size: 400% 400%;
+            animation: animatedBackground 15s ease infinite; 
+        }
+
+    </style>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+    <div class="container">
+        <div class="blog-title">
+            <%= blog.title %>
+        </div>
+        <div class="blog-box">
+            <div class="blogimage">
+                <img src="<%= blog.coverImageURL %>" alt="Blog Image">
+            </div>
+            <div class="user-info animated">
+                <img src="<%= blog.createdBy.profileImageUrl %>" alt="User Image" class="user-image">
+                <span><%= blog.createdBy.fullName %></span>
+            </div>
+            <div class="blog-content animated">
+                <pre><%= blog.body %></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="container comments-section">
+        <h2 class="animated">Comments (<%= comments.length %>)</h2>
+        <% if (locals.user) { %>
+        <form action="/blog/comment/<%=blog._id%>" method="post" class="animated">
+            <div class="mb-3">
+                <input type="text" class="form-control" name="content" placeholder="Enter your Comment" id="content">
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">ADD</button>
+        </form>
+        <% } %>
+        <div class="comments-list animated">
+            <% comments.forEach(comment => { %>
+            <div class="comment-box">
+                <img src="<%= comment.createdBy.profileImageUrl %>" alt="User Image">
+                <p class="comment-content"><%= comment.createdBy.fullName %>: <%= comment.content %></p>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <%- include('./partials/script') %>
+</body>
+
+</html>
