@@ -35,7 +35,7 @@ app.use("/blog", blogRoute);
 app.use("/user", userRoute);
 
 app.get("/", async (req, res) => {
-    const allBlog = await Blog.find({});
+    const allBlog = await Blog.find({}).maxTimeMS(30000);
     res.render("home", {
         user: req.user,
         blogs: allBlog,
